@@ -1,6 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 #       mdstat.py
 #       
 #       Copyright 2011 Alexey Zotov <alexey.zotov@gmail.com>
+#       Copyright 2014 Philipp Klaus <philipp.klaus@gmail.com>
 #       
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -16,8 +20,9 @@
 #       along with this program; if not, write to the Free Software
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
-
-# -*- coding: utf-8 -*-
+#       
+#       mdstat.py is originally from code.google.com/p/softraid-monitor :
+#       http://code.google.com/p/softraid-monitor/source/browse/contents/code/mdstat.py
 
 def get_status():
     result = {
@@ -235,6 +240,7 @@ def parse_raid1_status(line, device):
     try:
         result['raid'].update({
             'total': int(disks[0]),
+            'nondegraded': int(disks[1]),
             'degraded': int(disks[0]) - int(disks[1])
         })
     except ValueError:
@@ -286,6 +292,7 @@ def parse_raid5_status(line, device):
     try:
         result['raid'].update({
             'total': int(disks[0]),
+            'nondegraded': int(disks[1]),
             'degraded': int(disks[0]) - int(disks[1])
         })
     except ValueError:
@@ -349,9 +356,16 @@ def parse_raid10_status(line, device):
     try:
         result['raid'].update({
             'total': int(disks[0]),
+            'nondegraded': int(disks[1]),
             'degraded': int(disks[0]) - int(disks[1])
         })
     except ValueError:
         return
 
     device.update(result)
+
+
+if __name__ == '__main__':
+    import pprint
+    pprint.pprint(get_status())
+

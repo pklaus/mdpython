@@ -1,0 +1,19 @@
+% rebase base title='Status of Raid Systems - /proc/mdstat'
+<h1>The current status of the RAID systems on {{hostname}}</h1>
+
+<ul>
+  % for device in devices:
+    <li>/dev/{{device}}
+      % dev = devices[device]
+      <ul>
+        <li>Status: {{dev['raid']['status']}}</li>
+        <li>Drives Up: {{dev['raid']['nondegraded']}}/{{dev['raid']['total']}}</li>
+        <li>Kind: {{dev['pers']}}</li>
+        % #<li>Blocks: {{dev['blocks']}}</li>
+        % disks = " ".join(["/dev/" + disk['name'] for disk in list(dev['disks'].values())])
+        <li>Disks: {{disks}}</li>
+      </ul>
+    </li>
+  % end
+</ul>
+

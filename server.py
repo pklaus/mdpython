@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import mdstat
-from bottle import route, run, view
+from bottle import route, run, view, redirect
 import socket
 
 @route('/api/mdstat/get_status')
@@ -31,6 +31,10 @@ def render_get_status():
     status = get_status()
     status['hostname'] = socket.gethostname()
     return status
+
+@route('/')
+def refer():
+    redirect('/mdstat/get_status')
 
 run(host='localhost', port=8080, debug=True)
 

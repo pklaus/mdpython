@@ -40,5 +40,9 @@ def refer():
 
 app.mount('/api', api)
 
-run(app, host='localhost', port=8080, debug=True)
+def main():
+    run(app, host='localhost', port=8080, debug=True)
+
+if __name__ == "__main__":
+    main()
 

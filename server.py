@@ -18,23 +18,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import mdstat
-from bottle import route, run, view, redirect
+from bottle import Bottle, route, run, view, redirect
 import socket
 
-@route('/api/mdstat/get_status')
+api = Bottle()
+@api.route('/mdstat/get_status')
 def get_status():
     return mdstat.get_status()
 
-@route('/mdstat/get_status')
-@view('get_status')
+app = Bottle()
+@app.route('/mdstat/get_status')
+@view('get_status.html')
 def render_get_status():
     status = get_status()
     status['hostname'] = socket.gethostname()
     return status
 
-@route('/')
+@app.route('/')
 def refer():
     redirect('/mdstat/get_status')
 
-run(host='localhost', port=8080, debug=True)
+app.mount('/api', api)
+
+run(app, host='localhost', port=8080, debug=True)
 
